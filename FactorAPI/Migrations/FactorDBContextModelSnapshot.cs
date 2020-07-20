@@ -21,7 +21,7 @@ namespace FactorAPI.Migrations
 
             modelBuilder.Entity("FactorAPI.Models.Entities.Invoice", b =>
                 {
-                    b.Property<long>("FactorID")
+                    b.Property<long>("InvoiceID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -35,7 +35,7 @@ namespace FactorAPI.Migrations
                     b.Property<long>("UserID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("FactorID");
+                    b.HasKey("InvoiceID");
 
                     b.ToTable("Invoice","pmwebsit_FactorDB");
                 });
@@ -71,7 +71,7 @@ namespace FactorAPI.Migrations
 
             modelBuilder.Entity("FactorAPI.Models.Entities.InvoiceItem", b =>
                 {
-                    b.HasOne("FactorAPI.Models.Entities.Invoice", "Invoice")
+                    b.HasOne("FactorAPI.Models.Entities.Invoice", null)
                         .WithMany("InvoiceItems")
                         .HasForeignKey("InvoiceID")
                         .OnDelete(DeleteBehavior.Cascade)

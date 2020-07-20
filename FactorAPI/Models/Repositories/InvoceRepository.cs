@@ -42,7 +42,7 @@ namespace FactorAPI.Models.Repositories
 
         public async Task<Invoice> GetInvoice(long id)
         {
-            return await _context.Invoices.FindAsync(id);
+            return await _context.Invoices.Include(p => p.InvoiceItems).FirstOrDefaultAsync(p => p.InvoiceID == id);
         }
 
         public async Task<IEnumerable<Invoice>> GetInvoices()
@@ -77,18 +77,18 @@ namespace FactorAPI.Models.Repositories
                 try
                 {
                     _context.Invoices.Add(invoice);
-                    await _context.SaveChangesAsync();
-                    foreach (var item in invoice.InvoiceItems)
-                    {
-                        item.InvoiceID = invoice.InvoiceID;
-                    }
-                    _context.InvoiceItems.AddRange(invoice.InvoiceItems.ToArray());
                     res = await _context.SaveChangesAsync();
+                    //foreach (var item in invoice.InvoiceItems)
+                    //{
+                    //    item.InvoiceID = invoice.InvoiceID;
+                    //}
+                    //_context.InvoiceItems.AddRange(invoice.InvoiceItems.ToArray());
+                    //res = await _context.SaveChangesAsync();
                     transaction.Commit();
                 }
-                catch (System.Exception)
+                catch (System.Exception er)
                 {
-
+                    string mes = er.Message;
                     transaction.Rollback();
                 }
 

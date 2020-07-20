@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FactorAPI.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace FactorAPI.Migrations
                 schema: "pmwebsit_FactorDB",
                 columns: table => new
                 {
-                    FactorID = table.Column<long>(nullable: false)
+                    InvoiceID = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<long>(nullable: false),
                     RegDate = table.Column<DateTime>(nullable: false),
@@ -23,7 +23,7 @@ namespace FactorAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Invoice", x => x.FactorID);
+                    table.PrimaryKey("PK_Invoice", x => x.InvoiceID);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,7 +47,7 @@ namespace FactorAPI.Migrations
                         column: x => x.InvoiceID,
                         principalSchema: "pmwebsit_FactorDB",
                         principalTable: "Invoice",
-                        principalColumn: "FactorID",
+                        principalColumn: "InvoiceID",
                         onDelete: ReferentialAction.Cascade);
                 });
 

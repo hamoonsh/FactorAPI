@@ -44,7 +44,7 @@ namespace FactorAPI
             {
                 options.ConnectionString = Configuration.GetConnectionString("FactorDB");
                 options.SchemaName = "pmwebsit_FactorDB";
-                options.TableName = "TestCache";
+                options.TableName = "CashingTable";
             });
 
         }
