@@ -8,7 +8,7 @@ namespace FactorAPI.Models.Repositories
     {
         public Task<IEnumerable<Invoice>> GetInvoices();
         public Task<Invoice> GetInvoice(long id);
-        public Task<bool> UpdateInvoice(long id, Invoice invoice);
+        public Task<bool> UpdateInvoice(Invoice invoice);
         public Task<bool> DeleteInvoice(Invoice invoice);
         public bool InvoiceExists(long id);
         public Task<bool> AddInvoice(Invoice invoice);

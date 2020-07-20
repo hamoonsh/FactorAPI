@@ -15,10 +15,7 @@ namespace FactorAPI.Models.Entities
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-
-            var connString = _config["Data:HospitalConnString"];
-
-            optionsBuilder.UseSqlServer("data source=185.159.152.62;initial catalog=pmwebsit_FactorDB;user id=pmwebsit_FactorDBAdmin;password=bDxc368^;multipleactiveresultsets=True;application name=EntityFramework&quot;");
+            optionsBuilder.UseSqlServer(_config.GetConnectionString("FactorDB"));
         }
     }
 }

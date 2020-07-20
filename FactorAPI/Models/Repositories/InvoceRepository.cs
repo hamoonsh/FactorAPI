@@ -18,17 +18,25 @@ namespace FactorAPI.Models.Repositories
         }
         public async Task<bool> DeleteInvoice(Invoice invoice)
         {
-            try
-            {
-                _context.Invoices.Remove(invoice);
-                await _context.SaveChangesAsync();
-
-            }
-            catch (Exception)
+            using (var transaction = _context.Database.BeginTransaction())
             {
 
-                return false;
+                try
+                {
+                    _context.Invoices.Remove(invoice);
+                    _context.InvoiceItems.RemoveRange(_context.InvoiceItems.Where(p => p.InvoiceID == invoice.InvoiceID));
+                    await _context.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (System.Exception)
+                {
+
+                    transaction.Rollback();
+                    return false;
+                }
+
             }
+
             return true;
         }
 
@@ -43,7 +51,7 @@ namespace FactorAPI.Models.Repositories
 
         }
 
-        public async Task<bool> UpdateInvoice(long id, Invoice invoice)
+        public async Task<bool> UpdateInvoice(Invoice invoice)
         {
             _context.Entry(invoice).State = EntityState.Modified;
             try

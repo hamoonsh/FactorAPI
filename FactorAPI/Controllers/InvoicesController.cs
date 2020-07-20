@@ -8,6 +8,7 @@ namespace FactorAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class InvoicesController : ControllerBase
     {
         private readonly FactorDBContext _context;
@@ -38,16 +39,16 @@ namespace FactorAPI.Controllers
 
         // GET: api/Invoices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Invoice>> GetInvoice(long id)
+        public async Task<IActionResult> GetInvoice(long id)
         {
-            var invoice = _repository.GetInvoice(id);
+            var invoice = await _repository.GetInvoice(id);
 
             if (invoice == null)
             {
                 return NotFound();
             }
 
-            return invoice;
+            return Ok(invoice);
         }
 
         // PUT: api/Invoices/5
@@ -55,12 +56,14 @@ namespace FactorAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInvoice(long id, Invoice invoice)
         {
-            if (id != invoice.InvoiceID)
+            if (id != invoice.InvoiceID || !_repository.InvoiceExists(id))
             {
                 return BadRequest();
             }
-
-            return NoContent();
+            if (await _repository.UpdateInvoice(invoice))
+                return Ok();
+            else
+                return StatusCode(500);
         }
 
         // POST: api/Invoices
@@ -69,8 +72,7 @@ namespace FactorAPI.Controllers
         public async Task<IActionResult> PostInvoice(Invoice invoice)
         {
 
-
-            if (res > 0)
+            if (await _repository.AddInvoice(invoice))
             {
                 return CreatedAtAction("GetInvoice", new { id = invoice.InvoiceID }, invoice);
 
@@ -83,11 +85,23 @@ namespace FactorAPI.Controllers
 
         // DELETE: api/Invoices/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Invoice>> DeleteInvoice(long id)
+        public async Task<IActionResult> DeleteInvoice(long id)
         {
+            var invoice = await _repository.GetInvoice(id);
 
+            if (invoice == null)
+            {
+                return BadRequest();
+            }
+            if (await _repository.DeleteInvoice(invoice))
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
 
-            return invoice;
         }
 
 
